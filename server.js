@@ -154,8 +154,8 @@ async function parseSessionFile(filePath, cwdDir) {
         header = obj;
       }
 
-      if (obj.type === "session_name") {
-        sessionName = obj.name || null;
+      if (obj.type === "session_info") {
+        sessionName = (obj.name && obj.name.trim()) || null;
       }
 
       if (obj.type === "message" && obj.message) {
