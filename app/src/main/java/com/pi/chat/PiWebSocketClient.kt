@@ -17,7 +17,7 @@ class PiWebSocketClient(
         fun onToolStart(toolName: String, args: String)
         fun onToolEnd(toolName: String, isError: Boolean)
         fun onError(error: String)
-        fun onStateReceived(modelName: String?, sessionId: String?)
+        fun onStateReceived(modelName: String?, thinkingLevel: String?, sessionId: String?)
     }
 
     private val gson = Gson()
@@ -127,8 +127,9 @@ class PiWebSocketClient(
             val data = obj.getAsJsonObject("data")
             val model = data?.getAsJsonObject("model")
             val modelName = model?.get("name")?.asString
+            val thinkingLevel = data?.get("thinkingLevel")?.asString
             val sessionId = data?.get("sessionId")?.asString
-            listener.onStateReceived(modelName, sessionId)
+            listener.onStateReceived(modelName, thinkingLevel, sessionId)
         }
 
         if (!success) {

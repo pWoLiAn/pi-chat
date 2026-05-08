@@ -31,5 +31,10 @@
             android:name=".SessionPickerActivity"
             android:exported="false"
             android:label="Sessions" />
+
+        <activity
+            android:name=".ModelSettingsActivity"
+            android:exported="false"
+            android:label="Model &amp; Thinking" />
     </application>
 </manifest>

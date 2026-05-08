@@ -46,6 +46,17 @@ class MainActivity : AppCompatActivity(), PiWebSocketClient.PiEventListener {
         }
     }
 
+    private val modelSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val changed = result.data?.getBooleanExtra(ModelSettingsActivity.RESULT_MODEL_CHANGED, false) ?: false
+            if (changed) {
+                piClient.requestState()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -104,6 +115,10 @@ class MainActivity : AppCompatActivity(), PiWebSocketClient.PiEventListener {
                 sessionPickerLauncher.launch(Intent(this, SessionPickerActivity::class.java))
                 true
             }
+            R.id.action_model -> {
+                modelSettingsLauncher.launch(Intent(this, ModelSettingsActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -147,8 +162,14 @@ class MainActivity : AppCompatActivity(), PiWebSocketClient.PiEventListener {
         addSystemMessage("Disconnected: $reason")
     }
 
-    override fun onStateReceived(modelName: String?, sessionId: String?) = runOnUiThread {
-        supportActionBar?.subtitle = modelName ?: "No model"
+    override fun onStateReceived(modelName: String?, thinkingLevel: String?, sessionId: String?) = runOnUiThread {
+        val subtitle = buildString {
+            append(modelName ?: "No model")
+            if (thinkingLevel != null && thinkingLevel != "off") {
+                append(" · 🧠 $thinkingLevel")
+            }
+        }
+        supportActionBar?.subtitle = subtitle
     }
 
     override fun onAgentStart() = runOnUiThread {
