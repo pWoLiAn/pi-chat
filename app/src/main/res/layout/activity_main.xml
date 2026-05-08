@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:titleTextColor="@android:color/white"
+            app:subtitleTextColor="#B0BEC5">
+
+            <View
+                android:id="@+id/statusIndicator"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/status_disconnected" />
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            android:background="@color/background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@color/surface"
+            android:elevation="8dp"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Message Pi..."
+                android:maxLines="4"
+                android:inputType="textMultiLine"
+                android:background="@drawable/edit_background"
+                android:padding="12dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="#78909C" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSend"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:text="➤"
+                android:textSize="20sp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="24dp"
+                app:backgroundTint="@color/accent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAbort"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:text="■"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="24dp"
+                app:backgroundTint="#EF5350" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
