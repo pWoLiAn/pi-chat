@@ -176,8 +176,7 @@ async function parseSessionFile(filePath, cwdDir) {
       // skip malformed lines
     }
 
-    // Don't read entire huge files just for metadata
-    if (linesRead > 500 && firstUserMessage) break;
+    // We must read the full file to find the latest session_info name
   }
 
   rl.close();
