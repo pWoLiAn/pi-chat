@@ -77,6 +77,10 @@ class PiWebSocketClient(
         send("""{"type":"abort"}""")
     }
 
+    fun sendRaw(json: String) {
+        send(json)
+    }
+
     fun requestState() {
         send("""{"type":"get_state"}""")
     }

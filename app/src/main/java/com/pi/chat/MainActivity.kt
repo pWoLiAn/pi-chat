@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pi.chat.databinding.ActivityMainBinding
@@ -22,6 +23,28 @@ class MainActivity : AppCompatActivity(), PiWebSocketClient.PiEventListener {
     private val messages = mutableListOf<ChatMessage>()
     private val textBuffer = StringBuilder()
     private var isStreaming = false
+
+    private val sessionPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data = result.data ?: return@registerForActivityResult
+            val sessionPath = data.getStringExtra(SessionPickerActivity.RESULT_SESSION_PATH)
+            val newSession = data.getBooleanExtra(SessionPickerActivity.RESULT_NEW_SESSION, false)
+
+            if (newSession) {
+                messages.clear()
+                refreshList()
+                addSystemMessage("Starting new session...")
+                piClient.sendRaw("""{ "type": "new_session" }""")
+            } else if (sessionPath != null) {
+                messages.clear()
+                refreshList()
+                addSystemMessage("Switching session...")
+                piClient.sendRaw("""{ "type": "switch_session", "sessionPath": "$sessionPath" }""")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +98,10 @@ class MainActivity : AppCompatActivity(), PiWebSocketClient.PiEventListener {
             }
             R.id.action_reconnect -> {
                 connectToServer()
+                true
+            }
+            R.id.action_sessions -> {
+                sessionPickerLauncher.launch(Intent(this, SessionPickerActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
